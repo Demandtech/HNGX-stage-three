@@ -31,6 +31,8 @@ export default function Header({ onOpen }) {
     dispatch(logoutUser())
   }
 
+  console.log(user)
+
   return (
     <Navbar shouldHideOnScroll>
       <NavbarContent justify='start'>
@@ -82,7 +84,7 @@ export default function Header({ onOpen }) {
                   as='button'
                   className='transition-transform'
                   color='secondary'
-                  name={user?.email}
+                  name={user.email}
                   size='sm'
                 />
               </DropdownTrigger>

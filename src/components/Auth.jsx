@@ -83,7 +83,7 @@ export default function Auth({ signUp, onClose }) {
         const {
           data: { user },
         } = await supabase.auth.getUser()
-
+        localStorage.setItem('user', JSON.stringify(user))
         dispatch(loginUser(user))
       }
       setIsloading(false)
