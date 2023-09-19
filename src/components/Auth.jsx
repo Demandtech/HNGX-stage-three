@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { EyeSlashFilledIcon } from '../assets/svgs/EyeSlashFilled'
 import { EyeFilledIcon } from '../assets/svgs/EyeFilled'
 import PropTypes from 'prop-types'
-import { users } from '../data'
 import { loginUser } from '../redux.jsx/actions'
 import { useDispatch } from 'react-redux'
 
@@ -24,6 +23,7 @@ export default function Auth({ signUp, onClose }) {
     email: { show: false, msg: '' },
     password: { show: false, msg: '' },
   })
+  const [isLoading, setIsloading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -37,8 +37,10 @@ export default function Auth({ signUp, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsloading(true)
 
     if (signUp && !values.name) {
+      setIsloading(false)
       setErrors({
         ...errors,
         name: { msg: 'Please enter your name', show: true },
@@ -49,6 +51,7 @@ export default function Auth({ signUp, onClose }) {
       !values.email ||
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
     ) {
+      setIsloading(false)
       setErrors({
         ...errors,
         email: { msg: 'Please enter a valid email', show: true },
@@ -56,6 +59,7 @@ export default function Auth({ signUp, onClose }) {
     }
 
     if (!values.password) {
+      setIsloading(false)
       setErrors({
         ...errors,
         password: { show: true, msg: 'Please enter your password' },
@@ -71,6 +75,7 @@ export default function Auth({ signUp, onClose }) {
       if (data && !error) {
         onClose()
         dispatch(loginUser(data))
+        setIsloading(false)
       }
     }
 
@@ -133,7 +138,7 @@ export default function Auth({ signUp, onClose }) {
         type='submit'
         className='btn text-white rounded-sm py-1.5 bg-black hover:bg-red hover:opacity-50 transition transition-background duration-500'
       >
-        Submit
+        {isLoading ? 'Loading...' : ' Submit'}
       </button>
     </form>
   )
