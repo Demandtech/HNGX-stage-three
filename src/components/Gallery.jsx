@@ -2,23 +2,40 @@ import { useCallback, useState } from 'react'
 import { images } from '../data'
 import Card from './Card'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
 
 const Gallery = () => {
   const [items, setItems] = useState(images)
+  const { isAuthenticated } = useSelector((store) => store.features)
 
-  const renderCard = useCallback((card, index) => {
-    return (
-      <Draggable
-        key={card.id.toString()}
-        draggableId={card.id.toString()}
-        index={index}
-      >
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
+  const renderCard = useCallback(
+    (card, index) => {
+      console.log(isAuthenticated)
+      return (
+        <div key={card.id.toString()}>
+          {isAuthenticated ? (
+            <Draggable
+              key={card.id.toString()}
+              draggableId={card.id.toString()}
+              index={index}
+            >
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                >
+                  <Card
+                    key={card.id}
+                    index={index}
+                    id={card.id}
+                    tag={card.tag}
+                    image={card.img}
+                  />
+                </div>
+              )}
+            </Draggable>
+          ) : (
             <Card
               key={card.id}
               index={index}
@@ -26,11 +43,12 @@ const Gallery = () => {
               tag={card.tag}
               image={card.img}
             />
-          </div>
-        )}
-      </Draggable>
-    )
-  }, [])
+          )}
+        </div>
+      )
+    },
+    [isAuthenticated]
+  )
 
   const onDragEnd = (result) => {
     if (!result.destination) {
@@ -49,29 +67,36 @@ const Gallery = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className='text-center mb-8'>
-        <h3 className='text-2xl'>Photography artwork examples </h3>
-        <p className='text-gray-500'>
-          See the best shots, that we’ve arranged into a portfolio
-        </p>
+      <div className='mb-20'>
+        <div className='text-center mb-8'>
+          <h3 className='text-2xl'>Photography artwork examples </h3>
+          <p className='text-gray-500'>
+            See the best shots, that we’ve arranged into a portfolio
+          </p>
+          {isAuthenticated ? (
+            <p className='text-gray-300 mt-10'>You can rearrange image</p>
+          ) : (
+            <p className='text-gray-300 mt-10'>Login Rearrange Image</p>
+          )}
+        </div>
+        <Droppable droppableId='gallery' direction='horizontal'>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className='grid md:grid-cols-2 lg:grid-cols-4 gap-5 px-5 md:px-8 lg-px-20'
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+              }}
+            >
+              {items.map((card, index) => {
+                return renderCard(card, index)
+              })}
+            </div>
+          )}
+        </Droppable>
       </div>
-      <Droppable droppableId='gallery' direction='horizontal'>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className='grid md:grid-cols-2 lg:grid-cols-4 gap-5 px-5 md:px-8 lg-px-20'
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-            }}
-          >
-            {items.map((card, index) => {
-              return renderCard(card, index)
-            })}
-          </div>
-        )}
-      </Droppable>
     </DragDropContext>
   )
 }

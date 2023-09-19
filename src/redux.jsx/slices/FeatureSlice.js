@@ -22,6 +22,7 @@ const featuresSlice = createSlice({
     },
     logoutUser: (state) => {
       state.isAuthenticated = false
+      localStorage.removeItem('user')
     },
   },
 })
