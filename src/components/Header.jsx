@@ -18,11 +18,18 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { logoutUser } from '../redux.jsx/actions'
 import { useDispatch } from 'react-redux'
+import { supabase } from './Auth'
 
 export default function Header({ onOpen }) {
   const [query, setQuery] = useState('')
-  const { isAuthenticated } = useSelector((store) => store.features)
+  const { isAuthenticated, user } = useSelector((store) => store.features)
   const dispatch = useDispatch()
+
+  const handleLogout = async () => {
+    const { error, data } = await supabase.auth.signOut()
+    console.log(error, data)
+    dispatch(logoutUser())
+  }
 
   return (
     <Navbar shouldHideOnScroll>
@@ -75,9 +82,8 @@ export default function Header({ onOpen }) {
                   as='button'
                   className='transition-transform'
                   color='secondary'
-                  name='Jason Hughes'
+                  name={user?.email}
                   size='sm'
-                  src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
                 />
               </DropdownTrigger>
             </>
@@ -89,14 +95,10 @@ export default function Header({ onOpen }) {
           <DropdownMenu aria-label='Profile Actions' variant='flat'>
             <DropdownItem key='profile' className='h-14 gap-2'>
               <p className='font-semibold'>Signed in as</p>
-              <p className='font-semibold'>zoey</p>
+              <p className='font-semibold'>{user?.email}</p>
             </DropdownItem>
 
-            <DropdownItem
-              key='logout'
-              color='danger'
-              onClick={() => dispatch(logoutUser())}
-            >
+            <DropdownItem key='logout' color='danger' onClick={handleLogout}>
               Log Out
             </DropdownItem>
           </DropdownMenu>

@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
+export const supabase = createClient(
   import.meta.env.VITE_APP_SUPABASE_URL,
   import.meta.env.VITE_APP_SUPABASE_ANON_KEY
 )
@@ -17,7 +17,11 @@ export default function Auth({ signUp, onClose }) {
   const [isVisible, setIsVisible] = useState(false)
   const dispatch = useDispatch()
   const toggleVisibility = () => setIsVisible(!isVisible)
-  const [values, setValues] = useState({ name: '', email: '', password: '' })
+  const [values, setValues] = useState({
+    name: '',
+    email: 'user@example.com',
+    password: '1Password',
+  })
   const [errors, setErrors] = useState({
     name: { show: false, msg: '' },
     email: { show: false, msg: '' },
@@ -75,8 +79,14 @@ export default function Auth({ signUp, onClose }) {
       if (data && !error) {
         onClose()
         dispatch(loginUser(data))
-        setIsloading(false)
+
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+
+        dispatch(loginUser(user))
       }
+      setIsloading(false)
     }
 
     if (values.password && values.email && values.name && signUp) {
