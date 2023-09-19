@@ -3,9 +3,20 @@ import { useState } from 'react'
 import { EyeSlashFilledIcon } from '../assets/svgs/EyeSlashFilled'
 import { EyeFilledIcon } from '../assets/svgs/EyeFilled'
 import PropTypes from 'prop-types'
+import { users } from '../data'
+import { loginUser } from '../redux.jsx/actions'
+import { useDispatch } from 'react-redux'
 
-export default function Auth({ signUp }) {
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  import.meta.env.VITE_APP_SUPABASE_URL,
+  import.meta.env.VITE_APP_SUPABASE_ANON_KEY
+)
+
+export default function Auth({ signUp, onClose }) {
   const [isVisible, setIsVisible] = useState(false)
+  const dispatch = useDispatch()
   const toggleVisibility = () => setIsVisible(!isVisible)
   const [values, setValues] = useState({ name: '', email: '', password: '' })
   const [errors, setErrors] = useState({
@@ -24,10 +35,8 @@ export default function Auth({ signUp }) {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-
-    console.log(values)
 
     if (signUp && !values.name) {
       setErrors({
@@ -54,13 +63,22 @@ export default function Auth({ signUp }) {
     }
 
     if (values.password && values.email && !signUp) {
-      // LOGIN
-      console.log('Login')
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      })
+
+      if (data && !error) {
+        onClose()
+        dispatch(loginUser(data))
+      }
     }
 
     if (values.password && values.email && values.name && signUp) {
       //SIGN UP
-      console.log('SIGN UP')
+      const { user, error } = await supabase.auth.signUp(values)
+
+      console.log(user, error)
     }
   }
 
@@ -123,4 +141,5 @@ export default function Auth({ signUp }) {
 
 Auth.propTypes = {
   signUp: PropTypes.bool,
+  onClose: PropTypes.func,
 }

@@ -17,13 +17,13 @@ export default function MyModal({ isOpen, onOpenChange }) {
       {/* <Button onPress={useModal}>Open Modal</Button> */}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
-          {() => (
+          {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>
                 {signUp ? 'Sign Up' : 'Login'}
               </ModalHeader>
               <ModalBody>
-                <Auth signUp={signUp} />
+                <Auth signUp={signUp} onClose={onClose} />
               </ModalBody>
               <ModalFooter>
                 <div className='text-sm'>

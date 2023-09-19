@@ -1,1 +1,1 @@
-export { setModal } from './slices/FeatureSlice'
+export { setModal, loginUser, logoutUser } from './slices/FeatureSlice'

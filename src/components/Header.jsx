@@ -16,10 +16,13 @@ import { Button } from '@nextui-org/react'
 import { SearchIcon } from '../assets/svgs/SearchIcon'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { logoutUser } from '../redux.jsx/actions'
+import { useDispatch } from 'react-redux'
 
 export default function Header({ onOpen }) {
   const [query, setQuery] = useState('')
   const { isAuthenticated } = useSelector((store) => store.features)
+  const dispatch = useDispatch()
 
   return (
     <Navbar shouldHideOnScroll>
@@ -77,22 +80,26 @@ export default function Header({ onOpen }) {
                   src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
                 />
               </DropdownTrigger>
-              <DropdownMenu aria-label='Profile Actions' variant='flat'>
-                <DropdownItem key='profile' className='h-14 gap-2'>
-                  <p className='font-semibold'>Signed in as</p>
-                  <p className='font-semibold'>zoey</p>
-                </DropdownItem>
-
-                <DropdownItem key='logout' color='danger'>
-                  Log Out
-                </DropdownItem>
-              </DropdownMenu>
             </>
           ) : (
             <>
               <Button onClick={() => onOpen()}>Login</Button>
             </>
           )}
+          <DropdownMenu aria-label='Profile Actions' variant='flat'>
+            <DropdownItem key='profile' className='h-14 gap-2'>
+              <p className='font-semibold'>Signed in as</p>
+              <p className='font-semibold'>zoey</p>
+            </DropdownItem>
+
+            <DropdownItem
+              key='logout'
+              color='danger'
+              onClick={() => dispatch(logoutUser())}
+            >
+              Log Out
+            </DropdownItem>
+          </DropdownMenu>
         </Dropdown>
       </NavbarContent>
     </Navbar>

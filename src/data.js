@@ -8,12 +8,30 @@ import img7 from './assets/images/img7.jpeg'
 import img8 from './assets/images/img8.jpeg'
 
 export const images = [
-  { img: img1, tag: 'Image 1', id: '1ssds' },
-  { img: img2, tag: 'Image 2', id: '2sadszx' },
-  { img: img3, tag: 'Image 3', id: '3adcz' },
-  { img: img4, tag: 'Image 4', id: '4dszdz' },
-  { img: img5, tag: 'Image 5', id: '5sdda' },
-  { img: img6, tag: 'Image 6', id: '6sdX' },
-  { img: img7, tag: 'Image 7', id: '7sddsds' },
-  { img: img8, tag: 'Image 8', id: '8dSf' },
+  { img: img1, tag: 'Love  ❤️', id: '1ssds' },
+  { img: img2, tag: 'Nature  🌿', id: '2sadszx' },
+  { img: img3, tag: 'Abstract  🎨', id: '3adcz' },
+  { img: img4, tag: 'Architecture  🏛️', id: '4dszdz' },
+  { img: img5, tag: 'Sunset   🌅', id: '5sdda' },
+  { img: img6, tag: 'Beach  🏖️', id: '6sdX' },
+  { img: img7, tag: 'Animal 🐾', id: '7sddsds' },
+  { img: img8, tag: 'Travel  ✈️', id: '8dSf' },
+]
+
+export const users = [
+  {
+    name: 'John Doe',
+    email: 'user@example.com',
+    password: '1Password',
+  },
+  {
+    name: 'John Doe',
+    email: 'userTwo@example.com',
+    password: '2Password',
+  },
+  {
+    name: 'John Doe',
+    email: 'userThree@example.com',
+    password: '3Password',
+  },
 ]

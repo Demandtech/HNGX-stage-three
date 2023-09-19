@@ -48,32 +48,30 @@ const Gallery = () => {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd} id='portfolio'>
-      <div className='mb-20'>
-        <div className='text-center mb-8'>
-          <h3 className='text-2xl'>Photography artwork examples </h3>
-          <p className='text-gray-500'>
-            See the best shots, that we’ve arranged into a portfolio
-          </p>
-        </div>
-        <Droppable droppableId='gallery' direction='horizontal'>
-          {(provided) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className='grid md:grid-cols-2 lg:grid-cols-4 gap-5 px-5 md:px-8 lg-px-12'
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-              }}
-            >
-              {items.map((card, index) => {
-                return renderCard(card, index)
-              })}
-            </div>
-          )}
-        </Droppable>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className='text-center mb-8'>
+        <h3 className='text-2xl'>Photography artwork examples </h3>
+        <p className='text-gray-500'>
+          See the best shots, that we’ve arranged into a portfolio
+        </p>
       </div>
+      <Droppable droppableId='gallery' direction='horizontal'>
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className='grid md:grid-cols-2 lg:grid-cols-4 gap-5 px-5 md:px-8 lg-px-20'
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            }}
+          >
+            {items.map((card, index) => {
+              return renderCard(card, index)
+            })}
+          </div>
+        )}
+      </Droppable>
     </DragDropContext>
   )
 }

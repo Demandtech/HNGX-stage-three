@@ -1,23 +1,16 @@
 import { useDisclosure } from '@nextui-org/react'
 import { Header, Modal, Hero, Gallery } from './components'
-import { useSelector } from 'react-redux'
 
 function App() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const { isAuthenticated } = useSelector((store) => store.features)
+
   return (
-    <>
+    <div className='max-w-[1440px mx-auto]'>
       <Header onOpen={onOpen} />
-      {isAuthenticated ? (
-        ''
-      ) : (
-        <>
-          <Hero />
-          <Gallery />
-        </>
-      )}
+      <Hero />
+      <Gallery />
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} />
-    </>
+    </div>
   )
 }
 
