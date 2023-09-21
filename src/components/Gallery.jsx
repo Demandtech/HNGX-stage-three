@@ -102,6 +102,7 @@ const Gallery = () => {
                   onDragEnter={(e) => dragEnter(e, index)}
                   onDragEnd={drop}
                   key={card.id}
+                  className='cursor-grab'
                 >
                   <Card
                     index={index}
