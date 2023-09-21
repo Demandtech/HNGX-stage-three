@@ -8,14 +8,14 @@ import img7 from './assets/images/img7.jpeg'
 import img8 from './assets/images/img8.jpeg'
 
 export const images = [
-  { img: img1, tag: 'Love  ❤️', id: '1ssds' },
-  { img: img2, tag: 'Nature  🌿', id: '2sadszx' },
-  { img: img3, tag: 'Abstract  🎨', id: '3adcz' },
-  { img: img4, tag: 'Architecture  🏛️', id: '4dszdz' },
-  { img: img5, tag: 'Sunset   🌅', id: '5sdda' },
-  { img: img6, tag: 'Beach  🏖️', id: '6sdX' },
-  { img: img7, tag: 'Animal 🐾', id: '7sddsds' },
-  { img: img8, tag: 'Travel  ✈️', id: '8dSf' },
+  { img: img1, tag: 'Love  ❤️', id: 1 },
+  { img: img2, tag: 'Nature  🌿', id: 2 },
+  { img: img3, tag: 'Abstract  🎨', id: 3 },
+  { img: img4, tag: 'Architecture  🏛️', id: 4 },
+  { img: img5, tag: 'Sunset   🌅', id: 5 },
+  { img: img6, tag: 'Beach  🏖️', id: 6 },
+  { img: img7, tag: 'Animal 🐾', id: 7 },
+  { img: img8, tag: 'Travel  ✈️', id: 8 },
 ]
 
 export const users = [
