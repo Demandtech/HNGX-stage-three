@@ -1,16 +1,29 @@
-import { useCallback, useState } from 'react'
-import { images } from '../data'
+import { useCallback, useEffect, useState } from 'react'
 import Card from './Card'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { useSelector } from 'react-redux'
+import { Oval } from 'react-loader-spinner'
+import { toggleLoading } from '../redux.jsx/actions'
+import { useDispatch } from 'react-redux'
 
 const Gallery = () => {
+  const { isAuthenticated, images, isLoading } = useSelector(
+    (store) => store.features
+  )
   const [items, setItems] = useState(images)
-  const { isAuthenticated } = useSelector((store) => store.features)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(toggleLoading(true))
+    setItems(images)
+
+    setTimeout(() => {
+      dispatch(toggleLoading(false))
+    }, 2000)
+  }, [images, dispatch])
 
   const renderCard = useCallback(
     (card, index) => {
-      console.log(isAuthenticated)
       return (
         <div key={card.id.toString()}>
           {isAuthenticated ? (
@@ -47,7 +60,7 @@ const Gallery = () => {
         </div>
       )
     },
-    [isAuthenticated]
+    [isAuthenticated, images]
   )
 
   const onDragEnd = (result) => {
@@ -65,6 +78,34 @@ const Gallery = () => {
     setItems(updatedImages)
   }
 
+  if (isLoading) {
+    return (
+      <Oval
+        height={80}
+        width={80}
+        color='#4fa94d'
+        wrapperStyle={{
+          display: 'flex',
+          justifyContent: 'center',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          alignItems: 'center',
+          background: '#ffffff',
+          zIndex: 1000000,
+        }}
+        wrapperClass=''
+        visible={true}
+        ariaLabel='oval-loading'
+        secondaryColor='#4fa94d'
+        strokeWidth={2}
+        strokeWidthSecondary={2}
+      />
+    )
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className='mb-20'>
@@ -74,11 +115,16 @@ const Gallery = () => {
             See the best shots, that we’ve arranged into a portfolio
           </p>
           {isAuthenticated ? (
-            <p className='text-gray-300 mt-10'>You can rearrange image</p>
+            <p className='text-gray-300 mt-10'>
+              {images.length > 0 ? 'You can rearrange image' : 'No Item Found'}
+            </p>
           ) : (
-            <p className='text-gray-300 mt-10'>Login Rearrange Image</p>
+            <p className='text-gray-300 mt-10'>
+              {images.length > 0 ? 'Login Rearrange Image' : 'No Item Found'}
+            </p>
           )}
         </div>
+
         <Droppable droppableId='gallery' direction='horizontal'>
           {(provided) => (
             <div

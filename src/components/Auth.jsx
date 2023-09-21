@@ -17,6 +17,7 @@ export default function Auth({ signUp, onClose }) {
   const [isVisible, setIsVisible] = useState(false)
   const dispatch = useDispatch()
   const toggleVisibility = () => setIsVisible(!isVisible)
+
   const [values, setValues] = useState({
     name: '',
     email: 'user@example.com',
@@ -26,6 +27,7 @@ export default function Auth({ signUp, onClose }) {
     name: { show: false, msg: '' },
     email: { show: false, msg: '' },
     password: { show: false, msg: '' },
+    general: { show: false, msg: '' },
   })
   const [isLoading, setIsloading] = useState(false)
 
@@ -76,6 +78,12 @@ export default function Auth({ signUp, onClose }) {
         password: values.password,
       })
 
+      if (error) {
+        setErrors((prev) => {
+          return { ...prev, general: { show: true, msg: error.message } }
+        })
+      }
+
       if (data && !error) {
         onClose()
         dispatch(loginUser(data))
@@ -99,6 +107,9 @@ export default function Auth({ signUp, onClose }) {
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-col gap-5'>
+      {errors.general.show && (
+        <span className='text-red-600'>{errors.general.msg}</span>
+      )}
       {signUp && (
         <Input
           onChange={handleChange}

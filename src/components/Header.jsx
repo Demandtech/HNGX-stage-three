@@ -16,9 +16,15 @@ import { Button } from '@nextui-org/react'
 import { SearchIcon } from '../assets/svgs/SearchIcon'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { logoutUser } from '../redux.jsx/actions'
+import {
+  getItems,
+  logoutUser,
+  setSearch,
+  toggleLoading,
+} from '../redux.jsx/actions'
 import { useDispatch } from 'react-redux'
 import { supabase } from './Auth'
+import { images } from '../data'
 
 export default function Header({ onOpen }) {
   const [query, setQuery] = useState('')
@@ -26,12 +32,20 @@ export default function Header({ onOpen }) {
   const dispatch = useDispatch()
 
   const handleLogout = async () => {
-    const { error, data } = await supabase.auth.signOut()
-    console.log(error, data)
+    await supabase.auth.signOut()
     dispatch(logoutUser())
   }
 
-  console.log(user)
+  const handleSearch = () => {
+    if (query) {
+      dispatch(toggleLoading(true))
+      dispatch(setSearch(query))
+    }
+    setTimeout(() => {
+      dispatch(toggleLoading(false))
+      setQuery('')
+    }, 2000)
+  }
 
   return (
     <Navbar shouldHideOnScroll>
@@ -42,17 +56,35 @@ export default function Header({ onOpen }) {
         </NavbarBrand>
         <NavbarContent className='hidden sm:flex gap-3'>
           <NavbarItem>
-            <Link color='foreground' href='#'>
+            <Link
+              color='foreground'
+              href='#'
+              onClick={() => dispatch(getItems(images))}
+            >
               Home
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link href='#' color='foreground'>
+            <Link
+              href='#gallery'
+              color='foreground'
+              onClick={() => {
+                window.scrollTo(0, 750)
+                dispatch(getItems(images))
+              }}
+            >
               Gallery
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link color='foreground' href='#portfolio'>
+            <Link
+              color='foreground'
+              href='#portfolio'
+              onClick={() => {
+                window.scrollTo(0, 750)
+                dispatch(getItems(images))
+              }}
+            >
               Portofolio
             </Link>
           </NavbarItem>
@@ -70,7 +102,11 @@ export default function Header({ onOpen }) {
           }}
           placeholder='Type to search...'
           size='sm'
-          startContent={<SearchIcon size={18} />}
+          startContent={
+            <button className=' cursor-pointer z-100' onClick={handleSearch}>
+              <SearchIcon size={18} />
+            </button>
+          }
           type='search'
           value={query}
           onChange={(e) => setQuery(e.target.value)}
