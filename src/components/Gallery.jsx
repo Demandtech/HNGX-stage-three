@@ -94,14 +94,16 @@ const Gallery = () => {
       <div className='grid grid-cols-2 lg:grid-cols-4 gap-5 px-5 md:px-8 lg-px-20'>
         {items.map((card, index) => {
           return (
-            <>
+            <div key={card.id}>
               {isAuthenticated ? (
                 <div
                   draggable
                   onDragStart={(e) => dragStart(e, index)}
                   onDragEnter={(e) => dragEnter(e, index)}
                   onDragEnd={drop}
-                  key={card.id}
+                  onTouchStart={(e) => dragStart(e, index)}
+                  onTouchMove={(e) => dragEnter(e, index)}
+                  onTouchEnd={drop}
                   className='cursor-grab'
                 >
                   <Card
@@ -120,7 +122,7 @@ const Gallery = () => {
                   image={card.img}
                 />
               )}
-            </>
+            </div>
           )
         })}
       </div>
