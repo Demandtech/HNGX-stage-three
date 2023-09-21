@@ -73,35 +73,43 @@ export default function Auth({ signUp, onClose }) {
     }
 
     if (values.password && values.email && !signUp) {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
-      })
-
-      if (error) {
-        setErrors((prev) => {
-          return { ...prev, general: { show: true, msg: error.message } }
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: values.email,
+          password: values.password,
         })
-      }
 
-      if (data && !error) {
-        onClose()
-        dispatch(loginUser(data))
+        if (error) {
+          setErrors((prev) => {
+            return { ...prev, general: { show: true, msg: error.message } }
+          })
+        }
 
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        localStorage.setItem('user', JSON.stringify(user))
-        dispatch(loginUser(user))
+        if (data && !error) {
+          onClose()
+          dispatch(loginUser(data))
+
+          const {
+            data: { user },
+          } = await supabase.auth.getUser()
+          localStorage.setItem('user', JSON.stringify(user))
+          dispatch(loginUser(user))
+        }
+        setIsloading(false)
+      } catch (err) {
+        console.log(err)
       }
-      setIsloading(false)
     }
 
     if (values.password && values.email && values.name && signUp) {
-      //SIGN UP
-      const { user, error } = await supabase.auth.signUp(values)
-
-      console.log(user, error)
+      try {
+        const data = await supabase.auth.signUp(values)
+        console.log(data)
+        setIsloading(false)
+      } catch (err) {
+        console.log(err)
+        setIsloading(false)
+      }
     }
   }
 

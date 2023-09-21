@@ -14,16 +14,16 @@ const Gallery = () => {
 
   const dragItem = useRef(null)
   const dragOverItem = useRef(null)
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
   const dragStart = (e, position) => {
-    console.log(position)
     dragItem.current = position
-    console.log(dragItem.current)
   }
 
   const dragEnter = (e, position) => {
+    e.preventDefault()
+
     dragOverItem.current = position
-    console.log(dragOverItem)
   }
 
   const drop = () => {
@@ -31,9 +31,9 @@ const Gallery = () => {
     const dragItemContent = copyImages[dragItem.current]
     copyImages.splice(dragItem.current, 1)
     copyImages.splice(dragOverItem.current, 0, dragItemContent)
-    // dragItem.current = null
-    // dragOverItem.current = null
     setItems(copyImages)
+    dragItem.current = null
+    dragOverItem.current = null
   }
 
   useEffect(() => {
@@ -91,13 +91,13 @@ const Gallery = () => {
         )}
       </div>
 
-      <div className='grid grid-cols-2 lg:grid-cols-4 gap-5 px-5 md:px-8 lg-px-20'>
+      <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-5 px-5 md:px-8 lg-px-20'>
         {items.map((card, index) => {
           return (
             <div key={card.id}>
               {isAuthenticated ? (
                 <div
-                  draggable
+                  draggable={!isMobile}
                   onDragStart={(e) => dragStart(e, index)}
                   onDragEnter={(e) => dragEnter(e, index)}
                   onDragEnd={drop}
